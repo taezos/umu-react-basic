@@ -4,6 +4,7 @@ module UmuReactBasic.Templates
   , srcMainFile
   , titleComponentFile
   , spagoDhallFile
+  , packagesDhallFile
   ) where
 
 import           Import
@@ -20,3 +21,6 @@ titleComponentFile = $(embedFileUtf8 "templates/TitleComponent.purs")
 
 spagoDhallFile :: Text
 spagoDhallFile = $(embedFileUtf8 "templates/spago.dhall")
+
+packagesDhallFile :: Text
+packagesDhallFile = $(embedFileUtf8 "templates/packages.dhall")
