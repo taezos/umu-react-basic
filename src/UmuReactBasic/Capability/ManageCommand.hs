@@ -26,6 +26,8 @@ generateProj mLoc = do
   writeHtmlDir mLoc
   writeIndexHtml mLoc
   writeSrcMainFile mLoc
+  writeComponentDir mLoc
+  writeTitleComponentFile mLoc
 
 writeSrcDir :: MonadIO m => Maybe Text -> m ()
 writeSrcDir mLoc = do
@@ -40,7 +42,7 @@ writeHtmlDir mLoc = do
 writeIndexHtml :: MonadIO m => Maybe Text -> m ()
 writeIndexHtml mLoc = do
   liftIO $ TP.writeTextFile
-    ( Turtle.fromText $ mkPathName mLoc "/html/index.html" ) indexHtmlFile
+    ( Turtle.fromText $ mkPathName mLoc "html/index.html" ) indexHtmlFile
   mkMessage "Generating html/index.html..."
 
 writeSrcMainFile :: MonadIO m => Maybe Text -> m ()
@@ -48,3 +50,14 @@ writeSrcMainFile mLoc = do
   liftIO $ TP.writeTextFile
     ( Turtle.fromText $ mkPathName mLoc "/src/Main.purs" ) srcMainFile
   mkMessage "Generating src/Main.purs..."
+
+writeComponentDir :: MonadIO m => Maybe Text -> m ()
+writeComponentDir mLoc = do
+  liftIO $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "src/Component" )
+  mkMessage "Generating Component..."
+
+writeTitleComponentFile :: MonadIO m => Maybe Text -> m ()
+writeTitleComponentFile mLoc = do
+  liftIO $ TP.writeTextFile
+    ( Turtle.fromText $ mkPathName mLoc "src/Component/Title.purs" ) titleComponentFile
+  mkMessage "Generating src/Component/Title.purs..."
