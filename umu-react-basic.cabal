@@ -19,11 +19,11 @@ extra-source-files:  CHANGELOG.md
 
 library
   exposed-modules:     UmuReactBasic
-                     , UmuReactBasic.Parser
-                     , UmuReactBasic.Capability.ManageCommand
   other-modules:       Import
                      , Paths_umu_react_basic
                      , UmuReactBasic.Util
+                     , UmuReactBasic.Parser
+                     , UmuReactBasic.Capability.ManageCommand
                      , UmuReactBasic.TH
   build-depends:       base >=4.12 && <4.14
                      , classy-prelude

@@ -21,9 +21,15 @@ generateProj
   => Maybe Text
   -> m ()
 generateProj mLoc = do
-  writeSrc mLoc
+  writeSrcDir mLoc
+  writeHtmlDir mLoc
 
-writeSrc :: MonadIO m => Maybe Text -> m ()
-writeSrc mLoc = do
+writeSrcDir :: MonadIO m => Maybe Text -> m ()
+writeSrcDir mLoc = do
   liftIO $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "src" )
   mkMessage "Generating src..."
+
+writeHtmlDir :: MonadIO m => Maybe Text -> m ()
+writeHtmlDir mLoc = do
+  liftIO $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "html" )
+  mkMessage "Generating html..."
