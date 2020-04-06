@@ -30,6 +30,8 @@ generateProj mLoc = do
   writeTitleComponentFile mLoc
   writeSpagoDhallFile mLoc
   writePackagesDhallFile mLoc
+  writeTestDir mLoc
+  writeTestMainFile mLoc
 
 writeSrcDir :: MonadIO m => Maybe Text -> m ()
 writeSrcDir mLoc = do
@@ -75,3 +77,13 @@ writePackagesDhallFile mLoc = do
   liftIO $
     TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "packages.dhall" ) packagesDhallFile
   mkMessage "Generating packages.dhall..."
+
+writeTestDir :: MonadIO m => Maybe Text -> m ()
+writeTestDir mLoc = do
+  liftIO $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "test" )
+  mkMessage "Generating test..."
+
+writeTestMainFile :: MonadIO m => Maybe Text -> m ()
+writeTestMainFile mLoc = do
+  liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "test/Main.purs" ) testMainFile
+  mkMessage "Generating test/Main.purs..."
