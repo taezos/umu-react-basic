@@ -24,8 +24,10 @@ library
                      , UmuReactBasic.Util
                      , UmuReactBasic.Parser
                      , UmuReactBasic.Capability.ManageCommand
+                     , UmuReactBasic.Capability.LogMessage
                      , UmuReactBasic.TH
                      , UmuReactBasic.Templates
+                     , UmuReactBasic.Log
   build-depends:       base >=4.12 && <4.14
                      , classy-prelude
                      , turtle
@@ -38,6 +40,8 @@ library
                      , ansi-terminal
                      , template-haskell
                      , file-embed
+                     , microlens
+                     , microlens-th
   hs-source-dirs:      src
   default-language:    Haskell2010
   default-extensions:  NoImplicitPrelude

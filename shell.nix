@@ -5,8 +5,9 @@ let
   inherit (nixpkgs) pkgs;
 
   f = { mkDerivation, ansi-terminal, base, bytestring
-      , classy-prelude, errors, file-embed, mtl, optparse-applicative
-      , stdenv, template-haskell, text, transformers, turtle
+      , classy-prelude, errors, file-embed, microlens, microlens-th, mtl
+      , optparse-applicative, stdenv, template-haskell, text
+      , transformers, turtle
       }:
       mkDerivation {
         pname = "umu-react-basic";
@@ -15,8 +16,9 @@ let
         isLibrary = true;
         isExecutable = true;
         libraryHaskellDepends = [
-          ansi-terminal base bytestring classy-prelude errors file-embed mtl
-          optparse-applicative template-haskell text transformers turtle
+          ansi-terminal base bytestring classy-prelude errors file-embed
+          microlens microlens-th mtl optparse-applicative template-haskell
+          text transformers turtle
         ];
         executableHaskellDepends = [ base classy-prelude ];
         license = "unknown";

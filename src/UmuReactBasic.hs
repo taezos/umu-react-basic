@@ -3,8 +3,11 @@ module UmuReactBasic where
 
 import           Import
 import           Options.Applicative
+import           UmuReactBasic.Capability.LogMessage
 import           UmuReactBasic.Capability.ManageCommand
+import           UmuReactBasic.Log
 import           UmuReactBasic.Parser
+import Lens.Micro
 
 newtype AppM m a
   = AppM
@@ -25,6 +28,30 @@ startApp = do
 
 instance MonadIO m => ManageCommand ( AppM m ) where
   generateProject = generateProj
+
+instance MonadIO m => LogMessage ( AppM m ) where
+  logMessage l = case l ^. logReason of
+    Info -> do
+      mkTerminalLog
+        ( l ^. logMsg . logMessageText )
+        Info
+        ( l ^. logMsg . logMessageHeader )
+    Debug -> do
+      mkTerminalLog
+        ( l ^. logMsg . logMessageText )
+        Debug
+        ( l ^. logMsg . logMessageHeader )
+    Error -> do
+      mkTerminalLog
+        ( l ^. logMsg . logMessageText )
+        Error
+        ( l ^. logMsg . logMessageHeader )
+    Warn -> do
+      mkTerminalLog
+        ( l ^. logMsg . logMessageText )
+        Warn
+        ( l ^. logMsg . logMessageHeader )
+
 
 runAppM :: MonadIO m => AppM m a -> m a
 runAppM app = unAppM app

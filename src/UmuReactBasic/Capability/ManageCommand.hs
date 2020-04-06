@@ -5,7 +5,8 @@ module UmuReactBasic.Capability.ManageCommand
 
 import           Import
 import qualified Turtle
-import qualified Turtle.Prelude          as TP
+import qualified Turtle.Prelude                      as TP
+import           UmuReactBasic.Capability.LogMessage
 import           UmuReactBasic.Templates
 import           UmuReactBasic.Util
 
@@ -18,7 +19,7 @@ instance ManageCommand IO where
 -- ManageCommand constraint is just so this function can only be used if
 -- there's an instance of ManageCommand
 generateProj
-  :: ( MonadIO m, ManageCommand m )
+  :: ( MonadIO m, ManageCommand m, LogMessage m )
   => Maybe Text
   -> m ()
 generateProj mLoc = do
@@ -35,67 +36,67 @@ generateProj mLoc = do
   writeMakefile mLoc
   writePackageJsonFile mLoc
 
-writeSrcDir :: MonadIO m => Maybe Text -> m ()
+writeSrcDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeSrcDir mLoc = do
   liftIO $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "src" )
-  mkMessage "Generating src..."
+  logInfo "Generating src..."
 
-writeHtmlDir :: MonadIO m => Maybe Text -> m ()
+writeHtmlDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeHtmlDir mLoc = do
   liftIO $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "html" )
-  mkMessage "Generating html..."
+  logInfo "Generating html..."
 
-writeIndexHtml :: MonadIO m => Maybe Text -> m ()
+writeIndexHtml :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeIndexHtml mLoc = do
   liftIO $ TP.writeTextFile
     ( Turtle.fromText $ mkPathName mLoc "html/index.html" ) indexHtmlFile
-  mkMessage "Generating html/index.html..."
+  logInfo "Generating html/index.html..."
 
-writeSrcMainFile :: MonadIO m => Maybe Text -> m ()
+writeSrcMainFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeSrcMainFile mLoc = do
   liftIO $ TP.writeTextFile
     ( Turtle.fromText $ mkPathName mLoc "/src/Main.purs" ) srcMainFile
-  mkMessage "Generating src/Main.purs..."
+  logInfo "Generating src/Main.purs..."
 
-writeComponentDir :: MonadIO m => Maybe Text -> m ()
+writeComponentDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeComponentDir mLoc = do
   liftIO $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "src/Component" )
-  mkMessage "Generating Component..."
+  logInfo "Generating Component..."
 
-writeTitleComponentFile :: MonadIO m => Maybe Text -> m ()
+writeTitleComponentFile  :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeTitleComponentFile mLoc = do
   liftIO $ TP.writeTextFile
     ( Turtle.fromText $ mkPathName mLoc "src/Component/Title.purs" ) titleComponentFile
-  mkMessage "Generating src/Component/Title.purs..."
+  logInfo "Generating src/Component/Title.purs..."
 
-writeSpagoDhallFile :: MonadIO m => Maybe Text -> m ()
+writeSpagoDhallFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeSpagoDhallFile mLoc =  do
   liftIO $ TP.writeTextFile
     ( Turtle.fromText $ mkPathName mLoc "spago.dhall" ) spagoDhallFile
-  mkMessage "Generating spago.dhall..."
+  logInfo "Generating spago.dhall..."
 
-writePackagesDhallFile :: MonadIO m => Maybe Text -> m ()
+writePackagesDhallFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writePackagesDhallFile mLoc = do
   liftIO $
     TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "packages.dhall" ) packagesDhallFile
-  mkMessage "Generating packages.dhall..."
+  logInfo "Generating packages.dhall..."
 
-writeTestDir :: MonadIO m => Maybe Text -> m ()
+writeTestDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeTestDir mLoc = do
   liftIO $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "test" )
-  mkMessage "Generating test..."
+  logInfo "Generating test..."
 
-writeTestMainFile :: MonadIO m => Maybe Text -> m ()
+writeTestMainFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeTestMainFile mLoc = do
   liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "test/Main.purs" ) testMainFile
-  mkMessage "Generating test/Main.purs..."
+  logInfo "Generating test/Main.purs..."
 
-writeMakefile :: MonadIO m => Maybe Text -> m ()
+writeMakefile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeMakefile mLoc = do
   liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "Makefile" ) makeFile
-  mkMessage "Generating Makefile..."
+  logInfo "Generating Makefile..."
 
-writePackageJsonFile :: MonadIO m => Maybe Text -> m ()
+writePackageJsonFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writePackageJsonFile mLoc = do
   liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "package.json" ) packageJsonFile
-  mkMessage "Generating package.json..."
+  logInfo "Generating package.json..."
