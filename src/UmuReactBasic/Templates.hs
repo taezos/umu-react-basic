@@ -7,6 +7,7 @@ module UmuReactBasic.Templates
   , packagesDhallFile
   , testMainFile
   , makeFile
+  , packageJsonFile
   ) where
 
 import           Import
@@ -32,3 +33,6 @@ testMainFile = $(embedFileUtf8 "templates/TestMain.purs")
 
 makeFile :: Text
 makeFile = $(embedFileUtf8 "templates/Makefile")
+
+packageJsonFile :: Text
+packageJsonFile = $(embedFileUtf8 "templates/package.json")
