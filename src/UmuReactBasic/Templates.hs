@@ -6,6 +6,7 @@ module UmuReactBasic.Templates
   , spagoDhallFile
   , packagesDhallFile
   , testMainFile
+  , makeFile
   ) where
 
 import           Import
@@ -28,3 +29,6 @@ packagesDhallFile = $(embedFileUtf8 "templates/packages.dhall")
 
 testMainFile :: Text
 testMainFile = $(embedFileUtf8 "templates/TestMain.purs")
+
+makeFile :: Text
+makeFile = $(embedFileUtf8 "templates/Makefile")
