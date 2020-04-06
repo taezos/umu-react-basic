@@ -5,7 +5,8 @@ module UmuReactBasic.Capability.ManageCommand
 
 import           Import
 import qualified Turtle
-import qualified Turtle.Prelude     as TP
+import qualified Turtle.Prelude          as TP
+import           UmuReactBasic.Templates
 import           UmuReactBasic.Util
 
 class Monad m => ManageCommand m where
@@ -23,6 +24,7 @@ generateProj
 generateProj mLoc = do
   writeSrcDir mLoc
   writeHtmlDir mLoc
+  writeIndexHtml mLoc
 
 writeSrcDir :: MonadIO m => Maybe Text -> m ()
 writeSrcDir mLoc = do
@@ -33,3 +35,9 @@ writeHtmlDir :: MonadIO m => Maybe Text -> m ()
 writeHtmlDir mLoc = do
   liftIO $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "html" )
   mkMessage "Generating html..."
+
+writeIndexHtml :: MonadIO m => Maybe Text -> m ()
+writeIndexHtml mLoc = do
+  liftIO $ TP.writeTextFile
+    ( Turtle.fromText $ mkPathName mLoc "/html/index.html" ) indexHtmlFile
+  mkMessage "Generating html/index.html..."

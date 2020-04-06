@@ -25,6 +25,7 @@ library
                      , UmuReactBasic.Parser
                      , UmuReactBasic.Capability.ManageCommand
                      , UmuReactBasic.TH
+                     , UmuReactBasic.Templates
   build-depends:       base >=4.12 && <4.14
                      , classy-prelude
                      , turtle
