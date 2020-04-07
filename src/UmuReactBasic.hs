@@ -21,7 +21,7 @@ startApp = do
       ( fullDesc <> progDesc umuProgDesc <> header umuHeader ))
   runAppM $ run comm
   where
-    run :: (MonadUnliftIO m, MonadIO m) => ManageCommand m => Command -> AppM m ()
+    run :: MonadIO m => ManageCommand m => Command -> AppM m ()
     run comm = case comm of
       CommandInit mLoc -> do
         generateProject mLoc

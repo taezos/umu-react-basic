@@ -99,7 +99,7 @@ writeTitleComponentFile mLoc = do
       liftIO $ TP.writeTextFile
         ( Turtle.fromText $ mkPathName mLoc "src/Component/Title.purs" )
         titleComponentFile
-      logError "Title.purs already exists!"
+      logInfo "Generating src/Component/Title.purs..."
 
 writeSpagoDhallFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeSpagoDhallFile mLoc =  do
