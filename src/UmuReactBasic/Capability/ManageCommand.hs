@@ -27,7 +27,7 @@ generateProj
   -> m ()
 generateProj mLoc = do
   writeSrcDir mLoc
-  writeHtmlDir mLoc
+  writeAssetsDir mLoc
   writeIndexHtml mLoc
   writeSrcMainFile mLoc
   writeComponentDir mLoc
@@ -49,26 +49,26 @@ writeSrcDir mLoc = do
     ( const $ logInfo "Generating src..." )
     res
 
-writeHtmlDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeHtmlDir mLoc = do
+writeAssetsDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
+writeAssetsDir mLoc = do
   res <- liftIO
     $ tryJust ( guard . isAlreadyExistsError )
-    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "html" )
+    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "assets" )
   either
     ( const $ logError "html directory already exists!" )
-    ( const $ logInfo "Generating html..." )
+    ( const $ logInfo "Generating assets..." )
     res
 
 writeIndexHtml :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeIndexHtml mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "html/index.html"
+  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "assets/index.html"
   if isExists
-    then logError "html/index.html already exists!"
+    then logError "assets/index.html already exists!"
     else do
       liftIO $ TP.writeTextFile
-        ( Turtle.fromText $ mkPathName mLoc "html/index.html" )
+        ( Turtle.fromText $ mkPathName mLoc "assets/index.html" )
         indexHtmlFile
-      logInfo "Generating html/index.html..."
+      logInfo "Generating assets/index.html..."
 
 writeSrcMainFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeSrcMainFile mLoc = do
