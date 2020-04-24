@@ -1,4 +1,4 @@
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module UmuReactBasic.Capability.ManageCommand
   ( ManageCommand (..)
   , generateProj
@@ -25,7 +25,14 @@ generateProj
   :: ( MonadIO m, ManageCommand m, LogMessage m )
   => Maybe Text
   -> m ()
-generateProj mLoc = do
+generateProj mLoc = case mLoc of
+  Nothing -> baseGeneration mLoc
+  Just loc -> do
+    writeInitialDir loc
+    baseGeneration mLoc
+
+baseGeneration :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
+baseGeneration mLoc = do
   writeSrcDir mLoc
   writeAssetsDir mLoc
   writeIndexHtml mLoc
@@ -38,6 +45,22 @@ generateProj mLoc = do
   writeTestMainFile mLoc
   writeMakefile mLoc
   writePackageJsonFile mLoc
+
+writeInitialDir :: ( MonadIO m, LogMessage m ) => Text -> m ()
+writeInitialDir loc = do
+  res <- liftIO
+    $ tryJust ( guard . isAlreadyExistsError )
+    $ TP.mkdir $ Turtle.fromText loc
+  either
+    ( const $ logWarn warningMessage )
+    ( const $ logInfo $ "Generating " <> loc <> "..." )
+    res
+  where
+    warningMessage :: Text
+    warningMessage = loc
+      <> " already exists but "
+      <> appName
+      <> " will continue to generate to that directory..."
 
 writeSrcDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeSrcDir mLoc = do
