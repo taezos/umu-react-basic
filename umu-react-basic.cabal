@@ -4,7 +4,7 @@ cabal-version:       >=1.10
 -- http://haskell.org/cabal/users-guide/
 
 name:                umu-react-basic
-version:             0.1.1.2
+version:             0.1.1.3
 -- synopsis:
 -- description:
 -- bug-reports:
@@ -48,7 +48,7 @@ library
                      , OverloadedStrings
   ghc-options:
     -Wall
-
+    -j6
 
 executable umu-react-basic
   main-is:             Main.hs
@@ -62,3 +62,7 @@ executable umu-react-basic
   default-extensions:  NoImplicitPrelude
   ghc-options:
     -Wall
+    -threaded
+    -rtsopts
+    -with-rtsopts=-N
+    -j6

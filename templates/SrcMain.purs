@@ -13,7 +13,7 @@ import Web.HTML ( window )
 import Effect ( Effect )
 import Effect.Exception ( throw )
 -- React
-import React.Basic.Hooks ( element, ReactComponent, component )
+import React.Basic.Hooks ( element, ReactComponent, component, JSX )
 import React.Basic.DOM as R
 
 mkMainComponent :: Effect ( ReactComponent {} )
@@ -25,11 +25,17 @@ mkMainComponent = do
       [ element title { text: "Hello, World" }
       ]
 
+-- This is separated so it can be called in the hot reload function.
+mainJSX :: Effect JSX
+mainJSX = do
+  mainComp <- mkMainComponent
+  pure $ element mainComp {}
+
 main :: Effect Unit
 main = do
   mApp <- getElementById "app" =<< ( map toNonElementParentNode $ document =<< window )
   case mApp of
     Nothing -> throw "App element not found."
     Just app -> do
-      mainComponent <- mkMainComponent
-      R.render ( element mainComponent {} ) app
+      mainComponent <- mainJSX
+      R.render mainComponent app

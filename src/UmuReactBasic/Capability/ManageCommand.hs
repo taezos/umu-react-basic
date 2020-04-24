@@ -36,6 +36,7 @@ baseGeneration mLoc = do
   writeSrcDir mLoc
   writeAssetsDir mLoc
   writeIndexHtml mLoc
+  writeHotRelodingIndexJs mLoc
   writeSrcMainFile mLoc
   writeComponentDir mLoc
   writeTitleComponentFile mLoc
@@ -45,6 +46,10 @@ baseGeneration mLoc = do
   writeTestMainFile mLoc
   writeMakefile mLoc
   writePackageJsonFile mLoc
+
+------------------------------------------
+--- DIRECTORY GENERATION
+------------------------------------------
 
 writeInitialDir :: ( MonadIO m, LogMessage m ) => Text -> m ()
 writeInitialDir loc = do
@@ -113,6 +118,9 @@ writeComponentDir mLoc = do
     ( const $ logInfo "Generating Component..." )
     res
 
+------------------------------------------
+--- FILE GENERATION
+------------------------------------------
 writeTitleComponentFile  :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeTitleComponentFile mLoc = do
   isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "src/Component/Title.purs"
@@ -178,3 +186,12 @@ writePackageJsonFile mLoc = do
     else do
       liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "package.json" ) packageJsonFile
       logInfo "Generating package.json..."
+
+writeHotRelodingIndexJs :: ( MonadIO m , LogMessage m ) => Maybe Text -> m ()
+writeHotRelodingIndexJs mLoc = do
+  isExists <- TP.testfile $  Turtle.fromText $ mkPathName mLoc "assets/index.js"
+  if isExists
+    then logError "assets/index.js already exists!"
+    else do
+      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "assets/index.js" ) hotReloadIndexJS
+      logInfo "Generating assets/index.js..."

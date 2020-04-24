@@ -8,6 +8,7 @@ module UmuReactBasic.Templates
   , testMainFile
   , makeFile
   , packageJsonFile
+  , hotReloadIndexJS
   ) where
 
 import           Import
@@ -36,3 +37,6 @@ makeFile = $(embedFileUtf8 "templates/Makefile")
 
 packageJsonFile :: Text
 packageJsonFile = $(embedFileUtf8 "templates/package.json")
+
+hotReloadIndexJS :: Text
+hotReloadIndexJS  = $(embedFileUtf8 "templates/index.js")
