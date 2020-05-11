@@ -83,7 +83,7 @@ writeAssetsDir mLoc = do
     $ tryJust ( guard . isAlreadyExistsError )
     $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "assets" )
   either
-    ( const $ logError "html directory already exists!" )
+    ( const $ logError "assets directory already exists!" )
     ( const $ logInfo "Generating assets..." )
     res
 
