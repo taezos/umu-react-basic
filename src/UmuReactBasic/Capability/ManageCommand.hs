@@ -71,22 +71,45 @@ writeSrcDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeSrcDir mLoc = do
   res <- liftIO
     $ tryJust ( guard . isAlreadyExistsError )
-    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "src" )
+    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc dirName )
   either
-    ( const $ logError "src directory already exists!" )
-    ( const $ logInfo "Generating src..." )
+    ( const $ logError $ dirName <> " directory already exists!" )
+    ( const $ logInfo $ "Generating " <> dirName <> "..." )
     res
+  where
+    dirName :: Text
+    dirName = "src"
+
 
 writeAssetsDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeAssetsDir mLoc = do
   res <- liftIO
     $ tryJust ( guard . isAlreadyExistsError )
-    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "assets" )
+    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc dirName )
   either
-    ( const $ logError "assets directory already exists!" )
-    ( const $ logInfo "Generating assets..." )
+    ( const $ logError $ dirName <> " directory already exists!" )
+    ( const $ logInfo $ "Generating " <> dirName <> "..." )
     res
+  where
+    dirName :: Text
+    dirName = "assets"
 
+writeComponentDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
+writeComponentDir mLoc = do
+  res <- liftIO
+    $ tryJust ( guard . isAlreadyExistsError )
+    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc dirName )
+  either
+    ( const $ logError $ dirName <> " directory already exists!" )
+    ( const $ logInfo $ "Generating " <> dirName <> "..." )
+    res
+  where
+    dirName :: Text
+    dirName = "src/Component"
+
+------------------------------------------
+--- FILE GENERATION
+------------------------------------------
 writeIndexHtml :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeIndexHtml mLoc = do
   isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "assets/index.html"
@@ -108,19 +131,6 @@ writeSrcMainFile mLoc = do
         ( Turtle.fromText $ mkPathName mLoc "/src/Main.purs" ) srcMainFile
       logInfo "Generating src/Main.purs..."
 
-writeComponentDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeComponentDir mLoc = do
-  res <- liftIO
-    $ tryJust ( guard . isAlreadyExistsError )
-    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "src/Component" )
-  either
-    ( const $ logError "src/Component directory already exists!" )
-    ( const $ logInfo "Generating Component..." )
-    res
-
-------------------------------------------
---- FILE GENERATION
-------------------------------------------
 writeTitleComponentFile  :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeTitleComponentFile mLoc = do
   isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "src/Component/Title.purs"
