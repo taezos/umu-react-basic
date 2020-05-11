@@ -107,101 +107,131 @@ writeComponentDir mLoc = do
     dirName :: Text
     dirName = "src/Component"
 
+writeTestDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
+writeTestDir mLoc = do
+  res <- liftIO $ tryJust (guard . isAlreadyExistsError) $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc dirName )
+  either
+    ( const $ logError $ dirName <> " directory already exists!")
+    ( const $ logInfo $ "Generating " <> dirName <> "...")
+    res
+  where
+    dirName :: Text
+    dirName = "test"
+
 ------------------------------------------
 --- FILE GENERATION
 ------------------------------------------
 writeIndexHtml :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeIndexHtml mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "assets/index.html"
+  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
   if isExists
-    then logError "assets/index.html already exists!"
+    then logError $ filePath <> " already exists!"
     else do
       liftIO $ TP.writeTextFile
-        ( Turtle.fromText $ mkPathName mLoc "assets/index.html" )
+        ( Turtle.fromText $ mkPathName mLoc filePath )
         indexHtmlFile
-      logInfo "Generating assets/index.html..."
+      logInfo $ "Generating " <> filePath <> "..."
+  where
+    filePath :: Text
+    filePath = "assets/index.html"
 
 writeSrcMainFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeSrcMainFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "src/Main.purs"
+  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
   if isExists
-    then logError "src/Main.purs already exists!"
+    then logError $ filePath <> " already exists!"
     else do
       liftIO $ TP.writeTextFile
-        ( Turtle.fromText $ mkPathName mLoc "/src/Main.purs" ) srcMainFile
-      logInfo "Generating src/Main.purs..."
+        ( Turtle.fromText $ mkPathName mLoc filePath ) srcMainFile
+      logInfo $ "Generating " <> filePath <> "..."
+  where
+    filePath :: Text
+    filePath = "src/Main.purs"
 
 writeTitleComponentFile  :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeTitleComponentFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "src/Component/Title.purs"
+  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
   if isExists
-    then logError "src/Component/Title.purs already exists!"
+    then logError $ filePath <> " already exists!"
     else do
       liftIO $ TP.writeTextFile
-        ( Turtle.fromText $ mkPathName mLoc "src/Component/Title.purs" )
+        ( Turtle.fromText $ mkPathName mLoc filePath )
         titleComponentFile
-      logInfo "Generating src/Component/Title.purs..."
+      logInfo $ "Generating " <> filePath <> "..."
+  where
+    filePath :: Text
+    filePath = "src/Component/Title.purs"
 
 writeSpagoDhallFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeSpagoDhallFile mLoc =  do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "spago.dhall"
+  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
   if isExists
-    then logError "spago.dhall already exists!"
+    then logError $ filePath <> " already exists!"
     else do
       liftIO $ TP.writeTextFile
-        ( Turtle.fromText $ mkPathName mLoc "spago.dhall" ) spagoDhallFile
-      logInfo "Generating spago.dhall..."
+        ( Turtle.fromText $ mkPathName mLoc filePath ) spagoDhallFile
+      logInfo $ "Generating " <> filePath <> "..."
+  where
+    filePath :: Text
+    filePath = "spago.dhall"
 
 writePackagesDhallFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writePackagesDhallFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "packages.dhall"
+  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
   if isExists
-    then logError "packages.dhall already exists!"
+    then logError $ filePath <> " already exists!"
     else do
       liftIO $
-        TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "packages.dhall" ) packagesDhallFile
-      logInfo "Generating packages.dhall..."
-
-writeTestDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeTestDir mLoc = do
-  res <- liftIO $ tryJust (guard . isAlreadyExistsError) $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc "test" )
-  either
-    ( const $ logError "test directory already exists!")
-    ( const $ logInfo "Generating test..")
-    res
+        TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) packagesDhallFile
+      logInfo $ "Generating " <> filePath <> "..."
+  where
+    filePath :: Text
+    filePath = "packages.dhall"
 
 writeTestMainFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeTestMainFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "test/Main.purs"
+  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
   if isExists
-    then logError "test/Main.purs already exists!"
+    then logError $ filePath <> " already exists!"
     else do
-      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "test/Main.purs" ) testMainFile
-      logInfo "Generating test/Main.purs..."
+      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) testMainFile
+      logInfo $ "Generating " <> filePath <> "..."
+  where
+    filePath :: Text
+    filePath = "test/Main.purs"
 
 writeMakefile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeMakefile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "Makefile"
+  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
   if isExists
-    then logError "Makefile already exists!"
+    then logError $ filePath <> " already exists!"
     else do
-      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "Makefile" ) makeFile
-      logInfo "Generating Makefile..."
+      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) makeFile
+      logInfo $ "Generating " <> filePath <> "..."
+  where
+    filePath :: Text
+    filePath = "Makefile"
 
 writePackageJsonFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writePackageJsonFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc "package.json"
+  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
   if isExists
-    then logError "package.json already exists!"
+    then logError $ filePath <> " already exists!"
     else do
-      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "package.json" ) packageJsonFile
-      logInfo "Generating package.json..."
+      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) packageJsonFile
+      logInfo $ "Generating " <> filePath <> "..."
+  where
+    filePath :: Text
+    filePath = "package.json"
 
 writeHotRelodingIndexJs :: ( MonadIO m , LogMessage m ) => Maybe Text -> m ()
 writeHotRelodingIndexJs mLoc = do
-  isExists <- TP.testfile $  Turtle.fromText $ mkPathName mLoc "assets/index.js"
+  isExists <- TP.testfile $  Turtle.fromText $ mkPathName mLoc filePath
   if isExists
-    then logError "assets/index.js already exists!"
+    then logError $ filePath <> " already exists!"
     else do
-      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc "assets/index.js" ) hotReloadIndexJS
-      logInfo "Generating assets/index.js..."
+      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) hotReloadIndexJS
+      logInfo $ "Generating " <> filePath <> "..."
+  where
+    filePath :: Text
+    filePath = "assets/index.js"
