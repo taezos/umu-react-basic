@@ -4,12 +4,13 @@ module UmuReactBasic.Util
   , isFileExists
   , isDirGenerated
   , dirResHandler
+  , generateFile
   ) where
 
 import           Import
 -- umu-react-basic
 import           UmuReactBasic.Capability.Log
---turtle
+-- turtle
 import qualified Turtle
 import qualified Turtle.Prelude               as TP
 

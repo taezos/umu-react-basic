@@ -1,12 +1,19 @@
+{-# LANGUAGE MultiWayIf #-}
 module UmuReactBasic.Capability.Command
   ( ManageCommand (..)
-  , generateProj
+  , generateProjectImpl
+  , generateComponentImpl
   ) where
 
 import           Import
+-- text
+import           Data.Char
+import qualified Data.Text                    as T
 -- Turtle
 import qualified Turtle
 import qualified Turtle.Prelude               as TP
+-- system-filepath
+import qualified System.FilePath              as FP
 -- Umu
 import           UmuReactBasic.Capability.Log
 import           UmuReactBasic.Templates
@@ -14,21 +21,69 @@ import           UmuReactBasic.Util
 
 class Monad m => ManageCommand m where
   generateProject :: Maybe Text -> m ()
+  generateComponent :: Text -> Text -> m ()
 
 instance ManageCommand IO where
   generateProject = liftIO . generateProject
+  generateComponent path = liftIO . generateComponent path
 
 -- ManageCommand constraint is just so this function can only be used if
 -- there's an instance of ManageCommand
-generateProj
+generateProjectImpl
   :: ( MonadIO m, ManageCommand m, LogMessage m )
   => Maybe Text
   -> m ()
-generateProj mLoc = case mLoc of
+generateProjectImpl mLoc = case mLoc of
   Nothing -> baseGeneration mLoc
   Just loc -> do
     writeInitialDir loc
     baseGeneration mLoc
+
+generateComponentImpl
+  :: ( MonadIO m, LogMessage m, ManageCommand m )
+  => Text
+  -> Text
+  -> m ()
+generateComponentImpl pathInput name =
+  writeComponentFile pathInput name
+
+writeComponentFile :: ( MonadIO m, LogMessage m ) => Text -> Text -> m ()
+writeComponentFile path componentName = do
+  fileExists <- TP.testfile $ Turtle.fromText encodedFilePath
+  dirExists <- TP.testdir $ Turtle.fromText encodedDirPath
+  if | fileExists -> logError ( encodedFilePath <> " already exists!" )
+     | dirExists && not fileExists -> do
+         liftIO $ TP.writeTextFile ( Turtle.fromText encodedFilePath )
+           ( reactComponentTemplate encodedComponentName componentName )
+         logInfo ( "Generated " <> encodedComponentName <> " component to " <> encodedDirPath )
+     | otherwise -> logError $ encodedDirPath <> " does not exist!"
+  where
+    encodedComponentName  :: Text
+    encodedComponentName =
+      maybe mempty ( <> "." <> componentName )
+      $ snd
+      <$> ( discardFirstDot . concatWithDot . filterLower . splitAtPathSeparator $ path )
+
+    discardFirstDot :: Text -> Maybe ( Char, Text )
+    discardFirstDot = T.uncons
+
+    filterLower :: [ Text ] -> [ Text ]
+    filterLower = filter ( not . all isLower )
+
+    concatWithDot :: [ Text ] -> Text
+    concatWithDot = concat . fmap ( "." <> )
+
+    splitAtPathSeparator :: Text -> [ Text ]
+    splitAtPathSeparator = T.split ( FP.pathSeparator == )
+
+    encodedFilePath :: Text
+    encodedFilePath = snoc path FP.pathSeparator <> pursFileName
+
+    pursFileName :: Text
+    pursFileName = componentName <> ".purs"
+
+    encodedDirPath :: Text
+    encodedDirPath = snoc path FP.pathSeparator
 
 baseGeneration :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 baseGeneration mPathInput = do
@@ -103,6 +158,7 @@ writeTestDir mPathInput = do
 ------------------------------------------
 --- FILE GENERATION
 ------------------------------------------
+
 writeIndexHtml :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
 writeIndexHtml mPathInput = do
   isExists <- isFileExists mPathInput filePath

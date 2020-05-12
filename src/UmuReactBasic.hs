@@ -23,11 +23,12 @@ startApp = do
   where
     run :: MonadIO m => ManageCommand m => Command -> AppM m ()
     run comm = case comm of
-      CommandInit mLoc -> do
-        generateProject mLoc
+      CommandInit mLoc -> generateProject mLoc
+      CommandComponent pathInput name -> generateComponent pathInput name
 
 instance MonadIO m => ManageCommand ( AppM m ) where
-  generateProject = generateProj
+  generateProject = generateProjectImpl
+  generateComponent = generateComponentImpl
 
 instance MonadIO m => LogMessage ( AppM m ) where
   logMessage l = case l ^. logReason of
@@ -51,7 +52,6 @@ instance MonadIO m => LogMessage ( AppM m ) where
         ( l ^. logMsg . logMessageText )
         Warn
         ( l ^. logMsg . logMessageHeader )
-
 
 runAppM :: MonadIO m => AppM m a -> m a
 runAppM app = unAppM app

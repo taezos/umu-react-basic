@@ -7,7 +7,7 @@ let
   f = { mkDerivation, ansi-terminal, base, bytestring
       , classy-prelude, errors, file-embed, microlens, microlens-th, mtl
       , optparse-applicative, stdenv, template-haskell, text
-      , transformers, turtle
+      , transformers, turtle, filepath
       }:
       mkDerivation {
         pname = "umu-react-basic";
@@ -18,7 +18,7 @@ let
         libraryHaskellDepends = [
           ansi-terminal base bytestring classy-prelude errors file-embed
           microlens microlens-th mtl optparse-applicative template-haskell
-          text transformers turtle
+          text transformers turtle filepath
         ];
         executableHaskellDepends = [ base classy-prelude ];
         license = "unknown";
