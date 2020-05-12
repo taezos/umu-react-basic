@@ -1,4 +1,3 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 module UmuReactBasic.Capability.Command
   ( ManageCommand (..)
   , generateProj
@@ -68,52 +67,33 @@ writeInitialDir loc = do
       <> " will continue to generate to that directory..."
 
 writeSrcDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeSrcDir mLoc = do
-  res <- liftIO
-    $ tryJust ( guard . isAlreadyExistsError )
-    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc dirName )
-  either
-    ( const $ logError $ dirName <> " directory already exists!" )
-    ( const $ logInfo $ "Generating " <> dirName <> "..." )
-    res
+writeSrcDir mPathInput = do
+  res <- isDirGenerated mPathInput dirName
+  dirResHandler dirName res
   where
     dirName :: Text
     dirName = "src"
 
-
 writeAssetsDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeAssetsDir mLoc = do
-  res <- liftIO
-    $ tryJust ( guard . isAlreadyExistsError )
-    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc dirName )
-  either
-    ( const $ logError $ dirName <> " directory already exists!" )
-    ( const $ logInfo $ "Generating " <> dirName <> "..." )
-    res
+writeAssetsDir mPathInput = do
+  res <- isDirGenerated mPathInput dirName
+  dirResHandler dirName res
   where
     dirName :: Text
     dirName = "assets"
 
 writeComponentDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeComponentDir mLoc = do
-  res <- liftIO
-    $ tryJust ( guard . isAlreadyExistsError )
-    $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc dirName )
-  either
-    ( const $ logError $ dirName <> " directory already exists!" )
-    ( const $ logInfo $ "Generating " <> dirName <> "..." )
-    res
+writeComponentDir mPathInput = do
+  res <- isDirGenerated mPathInput dirName
+  dirResHandler dirName res
   where
     dirName :: Text
     dirName = "src/Component"
 
 writeTestDir :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeTestDir mLoc = do
-  res <- liftIO $ tryJust (guard . isAlreadyExistsError) $ TP.mkdir ( Turtle.fromText $ mkPathName mLoc dirName )
-  either
-    ( const $ logError $ dirName <> " directory already exists!")
-    ( const $ logInfo $ "Generating " <> dirName <> "...")
-    res
+writeTestDir mPathInput = do
+  res <- isDirGenerated mPathInput dirName
+  dirResHandler dirName res
   where
     dirName :: Text
     dirName = "test"
