@@ -31,20 +31,22 @@ generateProj mLoc = case mLoc of
     baseGeneration mLoc
 
 baseGeneration :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-baseGeneration mLoc = do
-  writeSrcDir mLoc
-  writeAssetsDir mLoc
-  writeIndexHtml mLoc
-  writeHotRelodingIndexJs mLoc
-  writeSrcMainFile mLoc
-  writeComponentDir mLoc
-  writeTitleComponentFile mLoc
-  writeSpagoDhallFile mLoc
-  writePackagesDhallFile mLoc
-  writeTestDir mLoc
-  writeTestMainFile mLoc
-  writeMakefile mLoc
-  writePackageJsonFile mLoc
+baseGeneration mPathInput = do
+  traverse_ ( $ mPathInput )
+    [ writeSrcDir
+    , writeAssetsDir
+    , writeIndexHtml
+    , writeHotRelodingIndexJs
+    , writeSrcMainFile
+    , writeComponentDir
+    , writeTitleComponentFile
+    , writeSpagoDhallFile
+    , writePackagesDhallFile
+    , writeTestDir
+    , writeTestMainFile
+    , writeMakefile
+    , writePackageJsonFile
+    ]
 
 ------------------------------------------
 --- DIRECTORY GENERATION
