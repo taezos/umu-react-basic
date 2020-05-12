@@ -3,8 +3,8 @@ module UmuReactBasic where
 
 import           Import
 import           Options.Applicative
-import           UmuReactBasic.Capability.LogMessage
-import           UmuReactBasic.Capability.ManageCommand
+import           UmuReactBasic.Capability.Log
+import           UmuReactBasic.Capability.Command
 import           UmuReactBasic.Log
 import           UmuReactBasic.Parser
 import Lens.Micro

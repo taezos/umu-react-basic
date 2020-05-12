@@ -23,8 +23,8 @@ library
                      , Paths_umu_react_basic
                      , UmuReactBasic.Util
                      , UmuReactBasic.Parser
-                     , UmuReactBasic.Capability.ManageCommand
-                     , UmuReactBasic.Capability.LogMessage
+                     , UmuReactBasic.Capability.Command
+                     , UmuReactBasic.Capability.Log
                      , UmuReactBasic.TH
                      , UmuReactBasic.Templates
                      , UmuReactBasic.Log

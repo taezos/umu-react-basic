@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances    #-}
 {-# LANGUAGE UndecidableInstances #-}
-module UmuReactBasic.Capability.LogMessage where
+module UmuReactBasic.Capability.Log where
 
 import           Import            hiding (log)
 import           UmuReactBasic.Log

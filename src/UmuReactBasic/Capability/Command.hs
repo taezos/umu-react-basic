@@ -1,5 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-module UmuReactBasic.Capability.ManageCommand
+module UmuReactBasic.Capability.Command
   ( ManageCommand (..)
   , generateProj
   ) where
@@ -7,9 +7,9 @@ module UmuReactBasic.Capability.ManageCommand
 import           Import
 -- Turtle
 import qualified Turtle
-import qualified Turtle.Prelude                      as TP
+import qualified Turtle.Prelude               as TP
 -- Umu
-import           UmuReactBasic.Capability.LogMessage
+import           UmuReactBasic.Capability.Log
 import           UmuReactBasic.Templates
 import           UmuReactBasic.Util
 
@@ -122,116 +122,73 @@ writeTestDir mLoc = do
 --- FILE GENERATION
 ------------------------------------------
 writeIndexHtml :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeIndexHtml mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
-  if isExists
-    then logError $ filePath <> " already exists!"
-    else do
-      liftIO $ TP.writeTextFile
-        ( Turtle.fromText $ mkPathName mLoc filePath )
-        indexHtmlFile
-      logInfo $ "Generating " <> filePath <> "..."
+writeIndexHtml mPathInput = do
+  isExists <- isFileExists mPathInput filePath
+  generateWhenFileNotExists isExists mPathInput filePath indexHtmlFile
   where
     filePath :: Text
     filePath = "assets/index.html"
 
 writeSrcMainFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeSrcMainFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
-  if isExists
-    then logError $ filePath <> " already exists!"
-    else do
-      liftIO $ TP.writeTextFile
-        ( Turtle.fromText $ mkPathName mLoc filePath ) srcMainFile
-      logInfo $ "Generating " <> filePath <> "..."
+writeSrcMainFile mPathInput = do
+  isExists <- isFileExists mPathInput filePath
+  generateWhenFileNotExists isExists mPathInput filePath srcMainFile
   where
     filePath :: Text
     filePath = "src/Main.purs"
 
 writeTitleComponentFile  :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeTitleComponentFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
-  if isExists
-    then logError $ filePath <> " already exists!"
-    else do
-      liftIO $ TP.writeTextFile
-        ( Turtle.fromText $ mkPathName mLoc filePath )
-        titleComponentFile
-      logInfo $ "Generating " <> filePath <> "..."
+writeTitleComponentFile mPathInput = do
+  isExists <- isFileExists mPathInput filePath
+  generateWhenFileNotExists isExists mPathInput filePath titleComponentFile
   where
     filePath :: Text
     filePath = "src/Component/Title.purs"
 
 writeSpagoDhallFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeSpagoDhallFile mLoc =  do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
-  if isExists
-    then logError $ filePath <> " already exists!"
-    else do
-      liftIO $ TP.writeTextFile
-        ( Turtle.fromText $ mkPathName mLoc filePath ) spagoDhallFile
-      logInfo $ "Generating " <> filePath <> "..."
+writeSpagoDhallFile mPathInput =  do
+  isExists <- isFileExists mPathInput filePath
+  generateWhenFileNotExists isExists mPathInput filePath spagoDhallFile
   where
     filePath :: Text
     filePath = "spago.dhall"
 
 writePackagesDhallFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writePackagesDhallFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
-  if isExists
-    then logError $ filePath <> " already exists!"
-    else do
-      liftIO $
-        TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) packagesDhallFile
-      logInfo $ "Generating " <> filePath <> "..."
+writePackagesDhallFile mPathInput = do
+  isExists <- isFileExists mPathInput filePath
+  generateWhenFileNotExists isExists mPathInput filePath packagesDhallFile
   where
     filePath :: Text
     filePath = "packages.dhall"
 
 writeTestMainFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeTestMainFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
-  if isExists
-    then logError $ filePath <> " already exists!"
-    else do
-      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) testMainFile
-      logInfo $ "Generating " <> filePath <> "..."
+writeTestMainFile mPathInput = do
+  isExists <- isFileExists mPathInput filePath
+  generateWhenFileNotExists isExists mPathInput filePath testMainFile
   where
     filePath :: Text
     filePath = "test/Main.purs"
 
 writeMakefile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writeMakefile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
-  if isExists
-    then logError $ filePath <> " already exists!"
-    else do
-      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) makeFile
-      logInfo $ "Generating " <> filePath <> "..."
+writeMakefile mPathInput = do
+  isExists <- isFileExists mPathInput filePath
+  generateWhenFileNotExists isExists mPathInput filePath makeFile
   where
     filePath :: Text
     filePath = "Makefile"
 
 writePackageJsonFile :: ( MonadIO m, LogMessage m ) => Maybe Text -> m ()
-writePackageJsonFile mLoc = do
-  isExists <- TP.testfile $ Turtle.fromText $ mkPathName mLoc filePath
-  if isExists
-    then logError $ filePath <> " already exists!"
-    else do
-      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) packageJsonFile
-      logInfo $ "Generating " <> filePath <> "..."
+writePackageJsonFile mPathInput = do
+  isExists <- isFileExists mPathInput filePath
+  generateWhenFileNotExists isExists mPathInput filePath packageJsonFile
   where
     filePath :: Text
     filePath = "package.json"
 
 writeHotRelodingIndexJs :: ( MonadIO m , LogMessage m ) => Maybe Text -> m ()
-writeHotRelodingIndexJs mLoc = do
-  isExists <- TP.testfile $  Turtle.fromText $ mkPathName mLoc filePath
-  if isExists
-    then logError $ filePath <> " already exists!"
-    else do
-      liftIO $ TP.writeTextFile ( Turtle.fromText $ mkPathName mLoc filePath ) hotReloadIndexJS
-      logInfo $ "Generating " <> filePath <> "..."
+writeHotRelodingIndexJs mPathInput = do
+  isExists <- isFileExists mPathInput filePath
+  generateWhenFileNotExists isExists mPathInput filePath hotReloadIndexJS
   where
     filePath :: Text
     filePath = "assets/index.js"
