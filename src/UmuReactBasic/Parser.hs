@@ -29,7 +29,7 @@ parseCommandComponent = CommandComponent <$> pathParser <*> nameParser
   where
     pathParser :: Parser Text
     pathParser = argument str
-      ( metavar "[COMPONENT_PATH]" <> help "Location to generate component" )
+      ( metavar "[COMPONENT_LOCATION]" <> help "Location to generate component" )
 
     nameParser :: Parser Text
     nameParser = argument str
